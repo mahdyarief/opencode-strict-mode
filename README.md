@@ -52,7 +52,13 @@ When installed as an OpenCode plugin, it injects a default instruction into chat
 
 ## Install from GitHub
 
-Add this plugin to your OpenCode config:
+### OpenCode install steps
+
+1. Open your OpenCode config file:
+   - Windows: `C:\Users\<your-user>\.config\opencode\opencode.jsonc`
+   - Linux/macOS: `~/.config/opencode/opencode.jsonc`
+2. Find or create the `plugin` array.
+3. Add this plugin entry:
 
 ```jsonc
 {
@@ -63,9 +69,41 @@ Add this plugin to your OpenCode config:
 }
 ```
 
-Then restart OpenCode.
+If you already have other plugins, append this line inside the existing `plugin` array:
 
-Strict mode will now apply globally by default.
+```jsonc
+"strict-mode@git+https://github.com/mahdyarief/opencode-strict-mode.git"
+```
+
+4. Save `opencode.jsonc`.
+5. Restart OpenCode.
+
+After restart, strict mode will apply globally by default.
+
+## Troubleshooting
+
+### Plugin not loading
+- Confirm the plugin entry exists in `opencode.jsonc` exactly as shown above.
+- Restart OpenCode after saving the config.
+- Check that the `plugin` array syntax is valid JSONC and that commas are correct.
+
+### Strict mode not applying
+- Make sure you did not disable it in-session with:
+  - `/strict off`
+  - `normal mode`
+- Re-enable it with:
+  - `/strict on`
+  - `strict mode`
+
+### Old local rule conflicts
+If you previously used a local rule file like `rules/strict-mode.md`, disable or remove it so the plugin becomes the single source of truth.
+
+### GitHub install problems
+This repository must include built output in `dist/`. If the plugin fails to load from GitHub, make sure the repository version you installed includes:
+- `dist/index.js`
+- `dist/index.d.ts`
+- `dist/strict-rule.js`
+- `dist/strict-rule.d.ts`
 
 ## Session toggles
 
