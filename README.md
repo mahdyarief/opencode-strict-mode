@@ -58,7 +58,7 @@ Add this plugin to your OpenCode config:
 {
   "$schema": "https://opencode.ai/config.json",
   "plugin": [
-    "strict-mode@git+https://github.com/<your-github-user>/<your-repo>.git"
+    "strict-mode@git+https://github.com/mahdyarief/opencode-strict-mode.git"
   ]
 }
 ```
@@ -66,6 +66,17 @@ Add this plugin to your OpenCode config:
 Then restart OpenCode.
 
 Strict mode will now apply globally by default.
+
+## Session toggles
+
+Implemented session-level toggles:
+
+- `/strict on`
+- `/strict off`
+- `strict mode`
+- `normal mode`
+
+These toggles let users temporarily disable or re-enable strict mode without uninstalling the plugin.
 
 ### GitHub install requirements
 
@@ -168,9 +179,9 @@ Before publishing publicly:
 
 ## Roadmap
 
-- v1: always-on strict mode injection
-- v2: optional `/strict on` and `/strict off` session toggles
-- v3: split Mode 2 compression into a companion package or clean optional skill
+- v1: global strict mode injection via plugin
+- v2: split Mode 2 compression into a companion package or clean optional skill
+- v3: optional advanced toggle behavior like persistent preferences or per-agent defaults
 
 ## License
 
