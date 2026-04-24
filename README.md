@@ -148,6 +148,12 @@ Typecheck:
 npm run typecheck
 ```
 
+Test:
+
+```bash
+npm test
+```
+
 Build:
 
 ```bash

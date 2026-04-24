@@ -1,15 +1,11 @@
 import { STRICT_MODE_RULE } from "./strict-rule.js";
 const RULE_MARKER = "Strict mode is enabled by default.";
-const STRICT_ON_PATTERNS = [
-    /\/strict\s+on\b/gi,
-    /\bbe\s+strict\b/gi,
-    /\bstrict\s+mode\b/gi,
-];
-const STRICT_OFF_PATTERNS = [
-    /\/strict\s+off\b/gi,
-    /\bstop\s+strict\b/gi,
-    /\bnormal\s+mode\b/gi,
-];
+const STRICT_ON_COMMANDS = new Set(["/strict on", "be strict", "strict mode"]);
+const STRICT_OFF_COMMANDS = new Set([
+    "/strict off",
+    "stop strict",
+    "normal mode",
+]);
 const isStrictRuleMessage = (message) => message.parts.some((part) => part.type === "text" &&
     typeof part.text === "string" &&
     part.text.includes(RULE_MARKER));
@@ -30,16 +26,32 @@ const getMessageText = (message) => message.parts
     .filter((part) => part.type === "text" && typeof part.text === "string")
     .map((part) => part.text ?? "")
     .join("\n");
-const getLastMatchIndex = (text, patterns) => {
-    let lastIndex = -1;
-    for (const pattern of patterns) {
-        for (const match of text.matchAll(pattern)) {
-            if (typeof match.index === "number" && match.index > lastIndex) {
-                lastIndex = match.index;
-            }
+const normalizeCommandText = (text) => text
+    .trim()
+    .toLowerCase()
+    .replace(/^[\s"'`([{]+|[\s"'`)\]}!,.?:;]+$/g, "");
+const getCommandToggle = (text) => {
+    const normalizedFullText = normalizeCommandText(text);
+    if (STRICT_ON_COMMANDS.has(normalizedFullText)) {
+        return true;
+    }
+    if (STRICT_OFF_COMMANDS.has(normalizedFullText)) {
+        return false;
+    }
+    const lines = text
+        .split(/\r?\n/)
+        .map((line) => normalizeCommandText(line))
+        .filter(Boolean);
+    for (let index = lines.length - 1; index >= 0; index -= 1) {
+        const line = lines[index];
+        if (STRICT_ON_COMMANDS.has(line)) {
+            return true;
+        }
+        if (STRICT_OFF_COMMANDS.has(line)) {
+            return false;
         }
     }
-    return lastIndex;
+    return undefined;
 };
 const getStrictModeEnabled = (messages) => {
     let enabled = true;
@@ -51,12 +63,10 @@ const getStrictModeEnabled = (messages) => {
         if (!text) {
             continue;
         }
-        const lastOnIndex = getLastMatchIndex(text, STRICT_ON_PATTERNS);
-        const lastOffIndex = getLastMatchIndex(text, STRICT_OFF_PATTERNS);
-        if (lastOnIndex === -1 && lastOffIndex === -1) {
-            continue;
+        const toggle = getCommandToggle(text);
+        if (typeof toggle === "boolean") {
+            enabled = toggle;
         }
-        enabled = lastOnIndex > lastOffIndex;
     }
     return enabled;
 };
