@@ -23,7 +23,7 @@ All notable changes to this project will be documented in this file.
 ### Build and publish
 - TypeScript build configured to emit distributable files into `dist/`
 - GitHub install flow documented, including requirement to commit built `dist/` output
-- Package metadata prepared for public GitHub and future npm publishing
+- Package metadata prepared for public GitHub distribution
 
 ### Toggle support
 - Added session-level strict mode toggles derived from chat history

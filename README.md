@@ -4,7 +4,7 @@ Global strict-response plugin for OpenCode.
 
 After install, OpenCode applies strict mode by default in every conversation. Responses become shorter, cleaner, and more direct while preserving technical accuracy.
 
-This repo is designed to be published publicly on GitHub or npm as an installable OpenCode plugin. It also includes the original `strict-compress` helper scripts for optional file compression workflows, but the main purpose of this package is **Mode 1: native global strict mode**.
+This repo is designed for GitHub-based distribution as an installable OpenCode plugin. It also includes the original `strict-compress` helper scripts for optional file compression workflows, but the main purpose of this package is **Mode 1: native global strict mode**.
 
 ## What this plugin does
 
@@ -90,18 +90,11 @@ Recommended release flow:
 
 Without committed `dist/`, GitHub installs may fail because OpenCode loads the package as published content, not your local dev workspace.
 
-## Install from npm
+## Distribution
 
-If you publish this package to npm, users can install it with:
+This plugin is currently distributed through GitHub only.
 
-```jsonc
-{
-  "$schema": "https://opencode.ai/config.json",
-  "plugin": [
-    "opencode-strict-mode@latest"
-  ]
-}
-```
+Built plugin output is committed in `dist/` so OpenCode can install it directly from this repository.
 
 ## Example
 
@@ -171,7 +164,7 @@ Before publishing publicly:
 - remove API keys
 - do not commit local `opencode.jsonc`
 - replace placeholder GitHub install URL in this README
-- verify package name if publishing to npm
+- verify the GitHub install URL is correct
 - run `npm run typecheck`
 - run `npm run build`
 - commit `dist/` for GitHub-based installs
